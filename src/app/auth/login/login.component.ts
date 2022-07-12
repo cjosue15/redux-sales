@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import Swal from 'sweetalert2';
+
 import { AuthService } from '@services/auth.service';
 
 @Component({
@@ -19,12 +21,27 @@ export class LoginComponent {
     });
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
     const { password, email } = this.loginForm.value;
+
+    Swal.fire({
+      title: 'Wait please',
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     this._authService.logInWithUser({ password, email }).subscribe({
       next: () => {
+        Swal.close();
         this._router.navigateByUrl('/');
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.message,
+        });
       },
     });
   }
