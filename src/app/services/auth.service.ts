@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  authState,
+} from '@angular/fire/auth';
 
 import { defer, from } from 'rxjs';
 
@@ -10,6 +16,10 @@ import { AuthUser } from '@models/auth.model';
 })
 export class AuthService {
   constructor(private _authFire: Auth) {}
+
+  initAuthListener() {
+    authState(this._authFire).subscribe((user) => console.log(user?.uid));
+  }
 
   createUser(user: AuthUser) {
     return defer(() => from(createUserWithEmailAndPassword(this._authFire, user.email, user.password)));
