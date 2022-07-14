@@ -7,22 +7,37 @@ import {
   authState,
 } from '@angular/fire/auth';
 
-import { defer, from } from 'rxjs';
+import { Firestore, collection, addDoc, setDoc, doc } from '@angular/fire/firestore';
+
+import { defer, from, map } from 'rxjs';
 
 import { AuthUser } from '@models/auth.model';
+import { User } from '@models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private _authFire: Auth) {}
+  constructor(private _authFire: Auth, private _firestore: Firestore) {}
 
   initAuthListener() {
     authState(this._authFire).subscribe((user) => console.log(user?.uid));
   }
 
   createUser(user: AuthUser) {
-    return defer(() => from(createUserWithEmailAndPassword(this._authFire, user.email, user.password)));
+    const userCredentiasPromise = createUserWithEmailAndPassword(this._authFire, user.email, user.password).then(
+      ({ user: userCredentias }) => {
+        debugger;
+        const newUser = new User(userCredentias.uid, user.name, user.email);
+        console.log(newUser);
+
+        const userRef = collection(this._firestore, 'user');
+
+        return addDoc(userRef, { ...newUser });
+      }
+    );
+
+    return defer(() => from(userCredentiasPromise));
   }
 
   logInWithUser(user: Partial<AuthUser>) {
@@ -33,5 +48,9 @@ export class AuthService {
 
   logOut() {
     return defer(() => from(signOut(this._authFire)));
+  }
+
+  isAuth() {
+    return authState(this._authFire).pipe(map((userCredentials) => !!userCredentials));
   }
 }
