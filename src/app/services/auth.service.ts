@@ -27,9 +27,7 @@ export class AuthService {
   createUser(user: AuthUser) {
     const userCredentiasPromise = createUserWithEmailAndPassword(this._authFire, user.email, user.password).then(
       ({ user: userCredentias }) => {
-        debugger;
         const newUser = new User(userCredentias.uid, user.name, user.email);
-        console.log(newUser);
 
         const userRef = collection(this._firestore, 'user');
 
