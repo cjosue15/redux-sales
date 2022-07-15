@@ -6,22 +6,35 @@ import {
   signOut,
   authState,
 } from '@angular/fire/auth';
+import { Store } from '@ngrx/store';
 
-import { Firestore, collection, addDoc, setDoc, doc } from '@angular/fire/firestore';
+import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 
-import { defer, from, map } from 'rxjs';
+import { defer, from, map, switchMap, Observable, of, tap } from 'rxjs';
 
 import { AuthUser } from '@models/auth.model';
 import { User } from '@models/user.model';
+
+import { setUser, removeUser } from '../auth/auth.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private _authFire: Auth, private _firestore: Firestore) {}
+  constructor(private _authFire: Auth, private _firestore: Firestore, private _store: Store) {}
 
   initAuthListener() {
-    authState(this._authFire).subscribe((user) => console.log(user?.uid));
+    authState(this._authFire)
+      .pipe(
+        switchMap((userFirestore) => {
+          console.log({ userFirestore });
+          return userFirestore ? docData(doc(this._firestore, 'users', userFirestore?.uid)) : of(null);
+        })
+      )
+      .subscribe((user) => {
+        console.log(user);
+        if (user) this._store.dispatch(setUser({ user: User.fromFirebase(user['uid'], user['name'], user['email']) }));
+      });
   }
 
   createUser(user: AuthUser) {
@@ -29,9 +42,7 @@ export class AuthService {
       ({ user: userCredentias }) => {
         const newUser = new User(userCredentias.uid, user.name, user.email);
 
-        const userRef = collection(this._firestore, 'user');
-
-        return addDoc(userRef, { ...newUser });
+        return setDoc(doc(this._firestore, 'users', userCredentias.uid), { ...newUser });
       }
     );
 
@@ -45,7 +56,7 @@ export class AuthService {
   }
 
   logOut() {
-    return defer(() => from(signOut(this._authFire)));
+    return defer(() => from(signOut(this._authFire))).pipe(tap(() => this._store.dispatch(removeUser())));
   }
 
   isAuth() {
