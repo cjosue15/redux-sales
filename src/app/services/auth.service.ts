@@ -21,18 +21,26 @@ import { setUser, removeUser } from '../auth/auth.actions';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private _authFire: Auth, private _firestore: Firestore, private _store: Store) {}
+  private _user: User | null;
+
+  public get user(): User | null {
+    return this._user ? { ...this._user } : null;
+  }
+
+  constructor(private _authFire: Auth, private _firestore: Firestore, private _store: Store) {
+    this._user = null;
+  }
 
   initAuthListener() {
     authState(this._authFire)
       .pipe(
         switchMap((userFirestore) => {
-          console.log({ userFirestore });
           return userFirestore ? docData(doc(this._firestore, 'users', userFirestore?.uid)) : of(null);
         })
       )
       .subscribe((user) => {
-        console.log(user);
+        this._user = user ? User.fromFirebase(user['uid'], user['name'], user['email']) : null;
+
         if (user) this._store.dispatch(setUser({ user: User.fromFirebase(user['uid'], user['name'], user['email']) }));
       });
   }
@@ -56,7 +64,12 @@ export class AuthService {
   }
 
   logOut() {
-    return defer(() => from(signOut(this._authFire))).pipe(tap(() => this._store.dispatch(removeUser())));
+    return defer(() => from(signOut(this._authFire))).pipe(
+      tap(() => {
+        this._store.dispatch(removeUser());
+        this._user = null;
+      })
+    );
   }
 
   isAuth() {

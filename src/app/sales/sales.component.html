@@ -19,37 +19,34 @@
 
           <div class="form-group">
             <label>Monto</label>
-            <input
-              type="number"
-              class="form-control"
-              placeholder="Monto"
-              name="monto"
-              formControlName="ammount"
-            />
+            <input type="number" class="form-control" placeholder="Monto" name="monto" formControlName="ammount" />
             <p>Debe de ser un monto positivo</p>
           </div>
 
           <div class="form-group">
             <label>Tipo</label>
             <br />
-            <button type="button" class="btn btn-primary btn-block" [disabled]="salesForm.invalid">
+            <!-- just for the course -->
+            <button *ngIf="type === 'input'" (click)="type = 'output'" type="button" class="btn btn-primary btn-block">
               Ingreso
             </button>
-            <!-- <button type="button" class="btn btn-warning btn-block">Egreso</button> -->
+            <button *ngIf="type === 'output'" (click)="type = 'input'" type="button" class="btn btn-warning btn-block">
+              Egreso
+            </button>
           </div>
 
           <hr />
-          <button type="submit" class="btn btn-success mr-2">
-            <i class="fa fa-save"></i>
-            Agregar
-          </button>
+          <ng-container *ngIf="isLoading$ | async as ui">
+            <button *ngIf="!ui.isLoading" type="submit" class="btn btn-success mr-2" [disabled]="salesForm.invalid">
+              <i class="fa fa-save"></i>
+              Agregar
+            </button>
 
-          <!--
-              <button disabled class="btn btn-success mr-2">
-                <i class="fa fa-spin fa-sync"></i>
-                Espere por favor...
-              </button>
-            -->
+            <button *ngIf="ui.isLoading" disabled class="btn btn-success mr-2">
+              <i class="fa fa-spin fa-sync"></i>
+              Espere por favor...
+            </button>
+          </ng-container>
 
           <button type="reset" class="btn btn-light">Cancelar</button>
         </form>
