@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-sales',
@@ -6,11 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class SalesComponent implements OnInit {
+export class SalesComponent {
 
-  constructor() { }
+  salesForm: FormGroup;
+  
+  constructor(private _fb: FormBuilder) { 
+    this.salesForm = this._fb.group({
+      description: new FormControl(null, Validators.required),
+      ammount: new FormControl(null, Validators.required)
+    })
+  }
 
-  ngOnInit(): void {
+  submit() {
+    console.log(this.salesForm.value)
   }
 
 }
