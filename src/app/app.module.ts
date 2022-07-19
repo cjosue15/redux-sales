@@ -23,6 +23,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { appReducers } from './app.reducer';
+import { SalesPipe } from './pipes/sales.pipe';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { appReducers } from './app.reducer';
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
+    SalesPipe,
   ],
   imports: [
     BrowserModule,

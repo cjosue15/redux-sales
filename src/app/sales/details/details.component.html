@@ -15,7 +15,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let sale of sales$ | async">
+            <tr *ngFor="let sale of sales$ | async | sales">
               <td>{{ sale.description }}</td>
               <td>{{ sale.amount | currency }}</td>
               <td [ngClass]="sale.type == 'input' ? 'text-success' : 'text-danger'">

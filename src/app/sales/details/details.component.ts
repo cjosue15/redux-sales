@@ -6,6 +6,7 @@ import { Sales } from '@models/sales.model';
 import { SalesService } from '@services/sales.service';
 
 import { AppState } from '../../app.reducer';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-details',
@@ -25,10 +26,10 @@ export class DetailsComponent implements OnInit {
 
   async delete(id: string | null): Promise<void> {
     try {
-      const result = await this._salesService.deleteSale(id);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
+      await this._salesService.deleteSale(id);
+      Swal.fire('Successfully removed!', undefined, 'success');
+    } catch (error: any) {
+      Swal.fire('Ops!', error.message, 'error');
     }
   }
 }

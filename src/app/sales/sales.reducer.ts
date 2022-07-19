@@ -17,7 +17,7 @@ export const _salesReducer = createReducer<State, Action>(
   on(removeItems, (state) => _removeItems(state))
 );
 
-const _setItems = (state: State, newItems: Sales[]): State => ({ ...state, items: [...state.items, ...newItems] });
+const _setItems = (state: State, newItems: Sales[]): State => ({ ...state, items: [...newItems] });
 
 const _removeItems = (state: State): State => ({ ...state, items: [] });
 
