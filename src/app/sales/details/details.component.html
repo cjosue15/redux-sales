@@ -7,19 +7,26 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Descripción</th>
-              <th>Monto</th>
-              <th>Tipo</th>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Type</th>
               <th></th>
             </tr>
           </thead>
 
           <tbody>
-            <tr>
-              <td>Descripción</td>
-              <td>Monto</td>
-              <td>Tipo</td>
-              <td>acciones</td>
+            <tr *ngFor="let sale of sales$ | async">
+              <td>{{ sale.description }}</td>
+              <td>{{ sale.amount | currency }}</td>
+              <td [ngClass]="sale.type == 'input' ? 'text-success' : 'text-danger'">
+                {{ sale.type === "input" ? "Income" : "Expense" }}
+              </td>
+              <td>
+                <button class="btn btn-danger" type="button" (click)="delete(sale.id)">
+                  <i class="fa fa-trash"></i>
+                  Delete
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
