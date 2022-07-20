@@ -9,6 +9,8 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import { NgChartsModule } from 'ng2-charts';
+
 import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -48,6 +50,7 @@ import { SalesPipe } from './pipes/sales.pipe';
     provideFirestore(() => getFirestore()),
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    NgChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
