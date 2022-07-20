@@ -5,8 +5,9 @@ import { Observable, map } from 'rxjs';
 import { Sales } from '@models/sales.model';
 import { SalesService } from '@services/sales.service';
 
-import { AppState } from '../../app.reducer';
 import Swal from 'sweetalert2';
+
+import { AppStateWithSales } from '../sales.reducer';
 
 @Component({
   selector: 'app-details',
@@ -16,7 +17,7 @@ import Swal from 'sweetalert2';
 export class DetailsComponent implements OnInit {
   sales$: Observable<Sales[]>;
 
-  constructor(private _store: Store<AppState>, private _salesService: SalesService) {
+  constructor(private _store: Store<AppStateWithSales>, private _salesService: SalesService) {
     this.sales$ = new Observable();
   }
 

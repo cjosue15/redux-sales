@@ -64,4 +64,8 @@ export class LoginComponent {
       },
     });
   }
+
+  goDashboard() {
+    this._router.navigateByUrl('/');
+  }
 }

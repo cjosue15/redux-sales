@@ -6,11 +6,11 @@ import * as sales from './sales/sales.reducer';
 export interface AppState {
   ui: ui.State;
   auth: auth.State;
-  sales: sales.State;
+  // sales: sales.State;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {
   ui: ui.uiReducer,
   auth: auth.authReducer,
-  sales: sales.salesReducer,
+  // sales: sales.salesReducer,
 };

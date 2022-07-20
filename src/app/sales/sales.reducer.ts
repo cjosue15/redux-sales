@@ -3,8 +3,14 @@ import { setItems, removeItems } from './sales.actions';
 
 import { Sales } from '@models/sales.model';
 
+import { AppState } from '../app.reducer';
+
 export interface State {
   items: Sales[];
+}
+
+export interface AppStateWithSales extends AppState {
+  sales: State;
 }
 
 export const initialState: State = {

@@ -6,8 +6,8 @@ import { ChartData, ChartType } from 'chart.js';
 
 import { Sales } from '@models/sales.model';
 
-import { AppState } from '../../app.reducer';
 import { Subscription } from 'rxjs';
+import { AppStateWithSales } from '../sales.reducer';
 
 @Component({
   selector: 'app-charts',
@@ -30,7 +30,7 @@ export class ChartsComponent implements OnInit, OnDestroy {
 
   private _subscription: Subscription;
 
-  constructor(private _store: Store<AppState>) {
+  constructor(private _store: Store<AppStateWithSales>) {
     this.incomesItems = 0;
     this.expensesItems = 0;
     this.totalExpenses = 0;

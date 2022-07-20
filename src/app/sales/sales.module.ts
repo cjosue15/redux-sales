@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
 
 import { NgChartsModule } from 'ng2-charts';
 
@@ -11,11 +13,21 @@ import { ChartsComponent } from './charts/charts.component';
 import { DetailsComponent } from './details/details.component';
 
 import { SharedModuleModule } from '../shared/shared.module';
-import { RouterModule } from '@angular/router';
+
+import { DashboardRoutingModule } from '../dashboard/dashboar-routing.module';
+import { salesReducer } from './sales.reducer';
 
 @NgModule({
   declarations: [DashboardComponent, SalesComponent, ChartsComponent, DetailsComponent, SalesPipe],
-  imports: [CommonModule, ReactiveFormsModule, NgChartsModule, SharedModuleModule, RouterModule],
+  imports: [
+    CommonModule,
+    StoreModule.forFeature('sales', salesReducer),
+    ReactiveFormsModule,
+    NgChartsModule,
+    SharedModuleModule,
+    RouterModule,
+    DashboardRoutingModule,
+  ],
   exports: [],
   providers: [],
 })

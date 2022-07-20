@@ -17,7 +17,6 @@ import { appReducers } from './app.reducer';
 
 // Modules
 import { AuthModule } from './auth/auth.module';
-import { SalesModule } from './sales/sales.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +29,6 @@ import { SalesModule } from './sales/sales.module';
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     AuthModule,
-    SalesModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
